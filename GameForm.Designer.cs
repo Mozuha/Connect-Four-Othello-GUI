@@ -41,23 +41,26 @@
       this.back2GSSFromFBtn = new System.Windows.Forms.Button();
       this.gridSizeFileBrowseBtn = new System.Windows.Forms.Button();
       this.gridSizeFileTbx = new System.Windows.Forms.TextBox();
+      this.gridSizeFileNameErrorLbl = new System.Windows.Forms.Label();
       this.enterRCFilePromptLbl = new System.Windows.Forms.Label();
       this.back2MainFromGSSBtn = new System.Windows.Forms.Button();
       this.enterRCDefaultBtn = new System.Windows.Forms.Button();
       this.enterRCFileBtn = new System.Windows.Forms.Button();
-      this.enterRCDirectBtn = new System.Windows.Forms.Button();
+      this.enterRCDirectlyBtn = new System.Windows.Forms.Button();
       this.gridSizeSelectTbx = new System.Windows.Forms.Label();
       this.restorePnl = new System.Windows.Forms.Panel();
       this.startGameFromRBtn = new System.Windows.Forms.Button();
       this.back2MainFromRBtn = new System.Windows.Forms.Button();
       this.restoreFileBrowseBtn = new System.Windows.Forms.Button();
       this.restoreFileTbx = new System.Windows.Forms.TextBox();
+      this.restoreFileNameErrorLbl = new System.Windows.Forms.Label();
       this.restoreFilePromptLbl = new System.Windows.Forms.Label();
       this.gamePnl = new System.Windows.Forms.Panel();
       this.dropPosSelectPnl = new System.Windows.Forms.Panel();
       this.dropPosBtn = new System.Windows.Forms.Button();
       this.dropPosNUD = new System.Windows.Forms.NumericUpDown();
       this.dropPosPromptLbl = new System.Windows.Forms.Label();
+      this.dropPosFullErrorLbl = new System.Windows.Forms.Label();
       this.resultPnl = new System.Windows.Forms.Panel();
       this.noBtn = new System.Windows.Forms.Button();
       this.yesBtn = new System.Windows.Forms.Button();
@@ -68,9 +71,10 @@
       this.saveFilePromptLbl = new System.Windows.Forms.Label();
       this.saveFileBrowseBtn = new System.Windows.Forms.Button();
       this.saveFileTbx = new System.Windows.Forms.TextBox();
+      this.saveFileNameErrorLbl = new System.Windows.Forms.Label();
       this.turnNumLbl = new System.Windows.Forms.Label();
       this.turnLbl = new System.Windows.Forms.Label();
-      this.gridPnl = new System.Windows.Forms.Panel();
+      this.gridRTxb = new System.Windows.Forms.RichTextBox();
       this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
       this.mainMenuPnl.SuspendLayout();
       this.gridSizeSelectPnl.SuspendLayout();
@@ -137,7 +141,7 @@
       this.gridSizeSelectPnl.Controls.Add(this.back2MainFromGSSBtn);
       this.gridSizeSelectPnl.Controls.Add(this.enterRCDefaultBtn);
       this.gridSizeSelectPnl.Controls.Add(this.enterRCFileBtn);
-      this.gridSizeSelectPnl.Controls.Add(this.enterRCDirectBtn);
+      this.gridSizeSelectPnl.Controls.Add(this.enterRCDirectlyBtn);
       this.gridSizeSelectPnl.Controls.Add(this.gridSizeSelectTbx);
       this.gridSizeSelectPnl.Location = new System.Drawing.Point(0, 0);
       this.gridSizeSelectPnl.Name = "gridSizeSelectPnl";
@@ -250,6 +254,7 @@
       this.enterRCFilePnl.Controls.Add(this.back2GSSFromFBtn);
       this.enterRCFilePnl.Controls.Add(this.gridSizeFileBrowseBtn);
       this.enterRCFilePnl.Controls.Add(this.gridSizeFileTbx);
+      this.enterRCFilePnl.Controls.Add(this.gridSizeFileNameErrorLbl);
       this.enterRCFilePnl.Controls.Add(this.enterRCFilePromptLbl);
       this.enterRCFilePnl.Location = new System.Drawing.Point(0, 0);
       this.enterRCFilePnl.Name = "enterRCFilePnl";
@@ -296,6 +301,16 @@
       this.gridSizeFileTbx.Size = new System.Drawing.Size(318, 25);
       this.gridSizeFileTbx.TabIndex = 1;
       // 
+      // gridSizeFileNameErrorLbl
+      // 
+      this.gridSizeFileNameErrorLbl.ForeColor = System.Drawing.Color.Red;
+      this.gridSizeFileNameErrorLbl.Location = new System.Drawing.Point(199, 265);
+      this.gridSizeFileNameErrorLbl.Name = "gridSizeFileNameErrorLbl";
+      this.gridSizeFileNameErrorLbl.Size = new System.Drawing.Size(450, 23);
+      this.gridSizeFileNameErrorLbl.TabIndex = 5;
+      this.gridSizeFileNameErrorLbl.Text = "Please choose an CSV or XML file";
+      this.gridSizeFileNameErrorLbl.Visible = false;
+      // 
       // enterRCFilePromptLbl
       // 
       this.enterRCFilePromptLbl.AutoSize = true;
@@ -339,16 +354,16 @@
       this.enterRCFileBtn.UseVisualStyleBackColor = true;
       this.enterRCFileBtn.Click += new System.EventHandler(this.enterRCFileBtn_Click);
       // 
-      // enterRCDirectBtn
+      // enterRCDirectlyBtn
       // 
-      this.enterRCDirectBtn.Font = new System.Drawing.Font("Impact", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.enterRCDirectBtn.Location = new System.Drawing.Point(189, 147);
-      this.enterRCDirectBtn.Name = "enterRCDirectBtn";
-      this.enterRCDirectBtn.Size = new System.Drawing.Size(400, 50);
-      this.enterRCDirectBtn.TabIndex = 1;
-      this.enterRCDirectBtn.Text = "Directly enter number of grid row and column";
-      this.enterRCDirectBtn.UseVisualStyleBackColor = true;
-      this.enterRCDirectBtn.Click += new System.EventHandler(this.enterRCDirectBtn_Click);
+      this.enterRCDirectlyBtn.Font = new System.Drawing.Font("Impact", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.enterRCDirectlyBtn.Location = new System.Drawing.Point(189, 147);
+      this.enterRCDirectlyBtn.Name = "enterRCDirectlyBtn";
+      this.enterRCDirectlyBtn.Size = new System.Drawing.Size(400, 50);
+      this.enterRCDirectlyBtn.TabIndex = 1;
+      this.enterRCDirectlyBtn.Text = "Directly enter number of grid row and column";
+      this.enterRCDirectlyBtn.UseVisualStyleBackColor = true;
+      this.enterRCDirectlyBtn.Click += new System.EventHandler(this.enterRCDirectlyBtn_Click);
       // 
       // gridSizeSelectTbx
       // 
@@ -366,6 +381,7 @@
       this.restorePnl.Controls.Add(this.back2MainFromRBtn);
       this.restorePnl.Controls.Add(this.restoreFileBrowseBtn);
       this.restorePnl.Controls.Add(this.restoreFileTbx);
+      this.restorePnl.Controls.Add(this.restoreFileNameErrorLbl);
       this.restorePnl.Controls.Add(this.restoreFilePromptLbl);
       this.restorePnl.Location = new System.Drawing.Point(0, 0);
       this.restorePnl.Name = "restorePnl";
@@ -414,6 +430,16 @@
       this.restoreFileTbx.Size = new System.Drawing.Size(408, 25);
       this.restoreFileTbx.TabIndex = 1;
       // 
+      // restoreFileNameErrorLbl
+      // 
+      this.restoreFileNameErrorLbl.ForeColor = System.Drawing.Color.Red;
+      this.restoreFileNameErrorLbl.Location = new System.Drawing.Point(135, 250);
+      this.restoreFileNameErrorLbl.Name = "restoreFileNameErrorLbl";
+      this.restoreFileNameErrorLbl.Size = new System.Drawing.Size(450, 23);
+      this.restoreFileNameErrorLbl.TabIndex = 5;
+      this.restoreFileNameErrorLbl.Text = "Please choose an XML file";
+      this.restoreFileNameErrorLbl.Visible = false;
+      // 
       // restoreFilePromptLbl
       // 
       this.restoreFilePromptLbl.AutoSize = true;
@@ -433,9 +459,10 @@
       this.gamePnl.Controls.Add(this.saveFilePromptLbl);
       this.gamePnl.Controls.Add(this.saveFileBrowseBtn);
       this.gamePnl.Controls.Add(this.saveFileTbx);
+      this.gamePnl.Controls.Add(this.saveFileNameErrorLbl);
       this.gamePnl.Controls.Add(this.turnNumLbl);
       this.gamePnl.Controls.Add(this.turnLbl);
-      this.gamePnl.Controls.Add(this.gridPnl);
+      this.gamePnl.Controls.Add(this.gridRTxb);
       this.gamePnl.Location = new System.Drawing.Point(0, 0);
       this.gamePnl.Name = "gamePnl";
       this.gamePnl.Size = new System.Drawing.Size(799, 467);
@@ -446,6 +473,7 @@
       this.dropPosSelectPnl.Controls.Add(this.dropPosBtn);
       this.dropPosSelectPnl.Controls.Add(this.dropPosNUD);
       this.dropPosSelectPnl.Controls.Add(this.dropPosPromptLbl);
+      this.dropPosSelectPnl.Controls.Add(this.dropPosFullErrorLbl);
       this.dropPosSelectPnl.Location = new System.Drawing.Point(570, 101);
       this.dropPosSelectPnl.Name = "dropPosSelectPnl";
       this.dropPosSelectPnl.Size = new System.Drawing.Size(225, 141);
@@ -478,6 +506,16 @@
       this.dropPosPromptLbl.Size = new System.Drawing.Size(198, 27);
       this.dropPosPromptLbl.TabIndex = 8;
       this.dropPosPromptLbl.Text = "Where to drop? (0-3)";
+      // 
+      // dropPosFullErrorLbl
+      // 
+      this.dropPosFullErrorLbl.ForeColor = System.Drawing.Color.Red;
+      this.dropPosFullErrorLbl.Location = new System.Drawing.Point(50, 122);
+      this.dropPosFullErrorLbl.Name = "dropPosFullErrorLbl";
+      this.dropPosFullErrorLbl.Size = new System.Drawing.Size(120, 23);
+      this.dropPosFullErrorLbl.TabIndex = 0;
+      this.dropPosFullErrorLbl.Text = "Full column!";
+      this.dropPosFullErrorLbl.Visible = false;
       // 
       // resultPnl
       // 
@@ -528,17 +566,17 @@
       // 
       this.resultStatusLbl.AutoSize = true;
       this.resultStatusLbl.Font = new System.Drawing.Font("Impact", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.resultStatusLbl.Location = new System.Drawing.Point(89, 11);
+      this.resultStatusLbl.Location = new System.Drawing.Point(120, 11);
       this.resultStatusLbl.Name = "resultStatusLbl";
-      this.resultStatusLbl.Size = new System.Drawing.Size(113, 27);
+      this.resultStatusLbl.Size = new System.Drawing.Size(67, 27);
       this.resultStatusLbl.TabIndex = 3;
-      this.resultStatusLbl.Text = "Yellow win!";
+      this.resultStatusLbl.Text = "O win!";
       // 
       // resultLbl
       // 
       this.resultLbl.AutoSize = true;
       this.resultLbl.Font = new System.Drawing.Font("Impact", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.resultLbl.Location = new System.Drawing.Point(7, 11);
+      this.resultLbl.Location = new System.Drawing.Point(30, 11);
       this.resultLbl.Name = "resultLbl";
       this.resultLbl.Size = new System.Drawing.Size(78, 27);
       this.resultLbl.TabIndex = 4;
@@ -547,7 +585,7 @@
       // saveExitBtn
       // 
       this.saveExitBtn.Font = new System.Drawing.Font("Impact", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.saveExitBtn.Location = new System.Drawing.Point(603, 370);
+      this.saveExitBtn.Location = new System.Drawing.Point(603, 390);
       this.saveExitBtn.Name = "saveExitBtn";
       this.saveExitBtn.Size = new System.Drawing.Size(163, 40);
       this.saveExitBtn.TabIndex = 8;
@@ -577,10 +615,21 @@
       // 
       // saveFileTbx
       // 
+      this.saveFileTbx.Enabled = false;
       this.saveFileTbx.Location = new System.Drawing.Point(570, 315);
       this.saveFileTbx.Name = "saveFileTbx";
       this.saveFileTbx.Size = new System.Drawing.Size(142, 25);
       this.saveFileTbx.TabIndex = 5;
+      // 
+      // saveFileNameErrorLbl
+      // 
+      this.saveFileNameErrorLbl.ForeColor = System.Drawing.Color.Red;
+      this.saveFileNameErrorLbl.Location = new System.Drawing.Point(570, 347);
+      this.saveFileNameErrorLbl.Name = "saveFileNameErrorLbl";
+      this.saveFileNameErrorLbl.Size = new System.Drawing.Size(220, 46);
+      this.saveFileNameErrorLbl.TabIndex = 10;
+      this.saveFileNameErrorLbl.Text = "Please choose an XML file";
+      this.saveFileNameErrorLbl.Visible = false;
       // 
       // turnNumLbl
       // 
@@ -588,9 +637,9 @@
       this.turnNumLbl.Font = new System.Drawing.Font("Impact", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.turnNumLbl.Location = new System.Drawing.Point(680, 59);
       this.turnNumLbl.Name = "turnNumLbl";
-      this.turnNumLbl.Size = new System.Drawing.Size(72, 27);
+      this.turnNumLbl.Size = new System.Drawing.Size(50, 27);
       this.turnNumLbl.TabIndex = 2;
-      this.turnNumLbl.Text = "1 (Red)";
+      this.turnNumLbl.Text = "1 (O)";
       // 
       // turnLbl
       // 
@@ -602,12 +651,14 @@
       this.turnLbl.TabIndex = 1;
       this.turnLbl.Text = "Turn: ";
       // 
-      // gridPnl
+      // gridRTxb
       // 
-      this.gridPnl.Location = new System.Drawing.Point(13, 13);
-      this.gridPnl.Name = "gridPnl";
-      this.gridPnl.Size = new System.Drawing.Size(552, 425);
-      this.gridPnl.TabIndex = 0;
+      this.gridRTxb.Enabled = false;
+      this.gridRTxb.Location = new System.Drawing.Point(13, 13);
+      this.gridRTxb.Name = "gridRTxb";
+      this.gridRTxb.Size = new System.Drawing.Size(552, 425);
+      this.gridRTxb.TabIndex = 0;
+      this.gridRTxb.Text = "";
       // 
       // openFileDialog1
       // 
@@ -651,7 +702,7 @@
     private System.Windows.Forms.Button restoreBtn;
     private System.Windows.Forms.Panel mainMenuPnl;
     private System.Windows.Forms.Panel gridSizeSelectPnl;
-    private System.Windows.Forms.Button enterRCDirectBtn;
+    private System.Windows.Forms.Button enterRCDirectlyBtn;
     private System.Windows.Forms.Label gridSizeSelectTbx;
     private System.Windows.Forms.Button back2MainFromGSSBtn;
     private System.Windows.Forms.Button enterRCDefaultBtn;
@@ -660,11 +711,12 @@
     private System.Windows.Forms.Button saveExitBtn;
     private System.Windows.Forms.Button saveFileBrowseBtn;
     private System.Windows.Forms.TextBox saveFileTbx;
+    private System.Windows.Forms.Label saveFileNameErrorLbl;
     private System.Windows.Forms.Label resultLbl;
     private System.Windows.Forms.Label resultStatusLbl;
     private System.Windows.Forms.Label turnNumLbl;
     private System.Windows.Forms.Label turnLbl;
-    private System.Windows.Forms.Panel gridPnl;
+    private System.Windows.Forms.RichTextBox gridRTxb;
     private System.Windows.Forms.OpenFileDialog openFileDialog1;
     private System.Windows.Forms.Panel resultPnl;
     private System.Windows.Forms.Button noBtn;
@@ -675,12 +727,14 @@
     private System.Windows.Forms.Button back2GSSFromFBtn;
     private System.Windows.Forms.Button gridSizeFileBrowseBtn;
     private System.Windows.Forms.TextBox gridSizeFileTbx;
+    private System.Windows.Forms.Label gridSizeFileNameErrorLbl;
     private System.Windows.Forms.Button startGameFromFBtn;
     private System.Windows.Forms.Panel restorePnl;
     private System.Windows.Forms.Label restoreFilePromptLbl;
     private System.Windows.Forms.Button back2MainFromRBtn;
     private System.Windows.Forms.Button restoreFileBrowseBtn;
     private System.Windows.Forms.TextBox restoreFileTbx;
+    private System.Windows.Forms.Label restoreFileNameErrorLbl;
     private System.Windows.Forms.Button startGameFromRBtn;
     private System.Windows.Forms.Panel enterRCDirectlyPnl;
     private System.Windows.Forms.Button back2GSSFromDBtn;
@@ -695,6 +749,7 @@
     private System.Windows.Forms.Button dropPosBtn;
     private System.Windows.Forms.NumericUpDown dropPosNUD;
     private System.Windows.Forms.Label dropPosPromptLbl;
+    private System.Windows.Forms.Label dropPosFullErrorLbl;
   }
 }
 

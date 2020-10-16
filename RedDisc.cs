@@ -12,6 +12,6 @@ namespace ConnectFourOthelloGUI {
   [Serializable]
   public class RedDisc : Disc {
     public override string Color => "red";  // property returns "red" as a value
-    public override char Symbol => 'o';  // property returns "o" as a value
+    public override char Symbol => 'O';  // property returns "O" as a value
   }
 }

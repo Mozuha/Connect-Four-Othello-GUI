@@ -1,9 +1,10 @@
 ﻿/*
- * Sep 12, 2020
+ * Oct 16, 2020
  * Mizuki Hashimoto
  * 
- * This is a class of grid. Its role is to apply changes to the grid with the values passed by main class,
+ * This is a class of grid. Its role is to apply changes to the grid with the values passed by controller,
  * and check the grid status. It now holds the state of turn and result so it can be serialized.
+ * Added Clear() function to clear the grid squares and reset state of turn and result for Play Again feature.
  * This class work as a model class.
  */
 
@@ -165,10 +166,12 @@ namespace ConnectFourOthelloGUI {
 
 			// horizontal check
 			for (int i = 0; i < row; i++) {
-				if (grid[i, 0].Color == disc.Color && grid[i, 1].Color == disc.Color
-					&& grid[i, 2].Color == disc.Color && grid[i, 3].Color == disc.Color) {
-					result = disc.Color;
-					return true;
+				for (int j = 0; j < col - 3; j++) {
+					if (grid[i, j].Color == disc.Color && grid[i, j + 1].Color == disc.Color
+						&& grid[i, j + 2].Color == disc.Color && grid[i, j + 3].Color == disc.Color) {
+						result = disc.Symbol.ToString();
+						return true;
+					}
 				}
 			}
 
@@ -177,7 +180,7 @@ namespace ConnectFourOthelloGUI {
 				for (int j = 0; j < col; j++) {
 					if (grid[i, j].Color == disc.Color && grid[i + 1, j].Color == disc.Color
 						&& grid[i + 2, j].Color == disc.Color && grid[i + 3, j].Color == disc.Color) {
-						result = disc.Color;
+						result = disc.Symbol.ToString();
 						return true;
 					}
 				}
@@ -188,7 +191,7 @@ namespace ConnectFourOthelloGUI {
 				for (int j = 0; j < col - 3; j++) {
 					if (grid[i, j].Color == disc.Color && grid[i - 1, j + 1].Color == disc.Color
 					&& grid[i - 2, j + 2].Color == disc.Color && grid[i - 3, j + 3].Color == disc.Color) {
-						result = disc.Color;
+						result = disc.Symbol.ToString();
 						return true;
 					}
 				}
@@ -199,7 +202,7 @@ namespace ConnectFourOthelloGUI {
 				for (int j = 3; j < col; j++) {
 					if (grid[i, j].Color == disc.Color && grid[i - 1, j - 1].Color == disc.Color
 					&& grid[i - 2, j - 2].Color == disc.Color && grid[i - 3, j - 3].Color == disc.Color) {
-						result = disc.Color;
+						result = disc.Symbol.ToString();
 						return true;
 					}
 				}
@@ -221,6 +224,21 @@ namespace ConnectFourOthelloGUI {
 				return true;
 			}
 			else return false;
+		}
+
+		// clear grid squares
+		public void Clear() {
+			GetGridSize(out int row, out int col);
+
+			// set all squares to be empty
+			for (int i = 0; i < row; i++) {
+				for (int j = 0; j < col; j++) {
+					grid[i, j] = empty;
+				}
+			}
+
+			turn = 1;  // reset turn number
+			result = "unfinished";  // reset result
 		}
 	}
 }

@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controller.cs" />
     <Compile Include="Disc.cs" />
     <Compile Include="Drawing.cs" />
     <Compile Include="EmptyDisc.cs" />
