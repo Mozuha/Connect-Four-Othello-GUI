@@ -1,9 +1,13 @@
 ﻿/*
- * Oct 16, 2020
+ * Oct 19, 2020
  * Mizuki Hashimoto
  * 
  * This is the main class of Connect Four Othello GUI. 
  * Its role is to handle events (receive event and call controller event). 
+ * 
+ * [Updates] (Oct 19, 2020)
+ * Added two timer widgets. One for update current date and time. 
+ * Another for update time remaining for a turn.
  */
 
 
@@ -19,7 +23,7 @@ namespace ConnectFourOthelloGUI {
       ctrl = new Controller(mainMenuPnl, gridSizeSelectPnl, enterRCDirectlyPnl, enterRCFilePnl, restorePnl, gamePnl,
         dropPosSelectPnl, resultPnl, rowNUD, colNUD, dropPosNUD, gridSizeFileTbx, restoreFileTbx, saveFileTbx,
         gridRTxb, gridSizeFileNameErrorLbl, restoreFileNameErrorLbl, dropPosPromptLbl, dropPosFullErrorLbl, turnLbl,
-        turnNumLbl, resultStatusLbl, saveFileNameErrorLbl, openFileDialog1);
+        turnNumLbl, turnTimerLbl, resultStatusLbl, saveFileNameErrorLbl, currTimeLbl, turnTimer, currTimer, openFileDialog1);
     }
 
     /*********************************************************************
@@ -144,6 +148,16 @@ namespace ConnectFourOthelloGUI {
     // "No" button clicked. Go to main menu. Show main panel.
     private void noBtn_Click(object sender, EventArgs e) {
       ctrl.noBtnEvent();
+    }
+
+    // currTimer ticked. Update current date and time.
+    private void currTimer_Tick(object sender, EventArgs e) {
+      ctrl.currTimer_Tick();
+    }
+
+    // turnTimer ticked. Update time remaining for that turn.
+    private void turnTimer_Tick(object sender, EventArgs e) {
+      ctrl.turnTimer_Tick();
     }
   }
 }

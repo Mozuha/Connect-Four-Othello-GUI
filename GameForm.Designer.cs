@@ -1,4 +1,6 @@
-﻿namespace ConnectFourOthelloGUI {
+﻿using System;
+
+namespace ConnectFourOthelloGUI {
   partial class GameForm {
     /// <summary>
     /// Required designer variable.
@@ -23,6 +25,7 @@
     /// the contents of this method with the code editor.
     /// </summary>
     private void InitializeComponent() {
+      this.components = new System.ComponentModel.Container();
       this.welcomePromptLbl = new System.Windows.Forms.Label();
       this.newGameBtn = new System.Windows.Forms.Button();
       this.restoreBtn = new System.Windows.Forms.Button();
@@ -61,6 +64,7 @@
       this.dropPosNUD = new System.Windows.Forms.NumericUpDown();
       this.dropPosPromptLbl = new System.Windows.Forms.Label();
       this.dropPosFullErrorLbl = new System.Windows.Forms.Label();
+      this.turnTimerLbl = new System.Windows.Forms.Label();
       this.resultPnl = new System.Windows.Forms.Panel();
       this.noBtn = new System.Windows.Forms.Button();
       this.yesBtn = new System.Windows.Forms.Button();
@@ -75,7 +79,10 @@
       this.turnNumLbl = new System.Windows.Forms.Label();
       this.turnLbl = new System.Windows.Forms.Label();
       this.gridRTxb = new System.Windows.Forms.RichTextBox();
+      this.currTimeLbl = new System.Windows.Forms.Label();
+      this.turnTimer = new System.Windows.Forms.Timer(this.components);
       this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+      this.currTimer = new System.Windows.Forms.Timer(this.components);
       this.mainMenuPnl.SuspendLayout();
       this.gridSizeSelectPnl.SuspendLayout();
       this.enterRCDirectlyPnl.SuspendLayout();
@@ -129,6 +136,7 @@
       this.mainMenuPnl.Controls.Add(this.welcomePromptLbl);
       this.mainMenuPnl.Controls.Add(this.restoreBtn);
       this.mainMenuPnl.Controls.Add(this.newGameBtn);
+      this.mainMenuPnl.Controls.Add(this.currTimeLbl);
       this.mainMenuPnl.Location = new System.Drawing.Point(0, 0);
       this.mainMenuPnl.Name = "mainMenuPnl";
       this.mainMenuPnl.Size = new System.Drawing.Size(804, 450);
@@ -474,7 +482,8 @@
       this.dropPosSelectPnl.Controls.Add(this.dropPosNUD);
       this.dropPosSelectPnl.Controls.Add(this.dropPosPromptLbl);
       this.dropPosSelectPnl.Controls.Add(this.dropPosFullErrorLbl);
-      this.dropPosSelectPnl.Location = new System.Drawing.Point(570, 101);
+      this.dropPosSelectPnl.Controls.Add(this.turnTimerLbl);
+      this.dropPosSelectPnl.Location = new System.Drawing.Point(570, 62);
       this.dropPosSelectPnl.Name = "dropPosSelectPnl";
       this.dropPosSelectPnl.Size = new System.Drawing.Size(225, 141);
       this.dropPosSelectPnl.TabIndex = 8;
@@ -517,6 +526,14 @@
       this.dropPosFullErrorLbl.Text = "Full column!";
       this.dropPosFullErrorLbl.Visible = false;
       // 
+      // turnTimerLbl
+      // 
+      this.turnTimerLbl.Font = new System.Drawing.Font("Impact", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.turnTimerLbl.Location = new System.Drawing.Point(80, 0);
+      this.turnTimerLbl.Name = "turnTimerLbl";
+      this.turnTimerLbl.Size = new System.Drawing.Size(100, 27);
+      this.turnTimerLbl.TabIndex = 11;
+      // 
       // resultPnl
       // 
       this.resultPnl.Controls.Add(this.noBtn);
@@ -524,9 +541,9 @@
       this.resultPnl.Controls.Add(this.playAgainPromptLbl);
       this.resultPnl.Controls.Add(this.resultStatusLbl);
       this.resultPnl.Controls.Add(this.resultLbl);
-      this.resultPnl.Location = new System.Drawing.Point(574, 101);
+      this.resultPnl.Location = new System.Drawing.Point(570, 62);
       this.resultPnl.Name = "resultPnl";
-      this.resultPnl.Size = new System.Drawing.Size(214, 141);
+      this.resultPnl.Size = new System.Drawing.Size(225, 141);
       this.resultPnl.TabIndex = 9;
       this.resultPnl.Visible = false;
       // 
@@ -585,7 +602,7 @@
       // saveExitBtn
       // 
       this.saveExitBtn.Font = new System.Drawing.Font("Impact", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.saveExitBtn.Location = new System.Drawing.Point(603, 390);
+      this.saveExitBtn.Location = new System.Drawing.Point(603, 351);
       this.saveExitBtn.Name = "saveExitBtn";
       this.saveExitBtn.Size = new System.Drawing.Size(163, 40);
       this.saveExitBtn.TabIndex = 8;
@@ -597,7 +614,7 @@
       // 
       this.saveFilePromptLbl.AutoSize = true;
       this.saveFilePromptLbl.Font = new System.Drawing.Font("Impact", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.saveFilePromptLbl.Location = new System.Drawing.Point(571, 260);
+      this.saveFilePromptLbl.Location = new System.Drawing.Point(571, 221);
       this.saveFilePromptLbl.Name = "saveFilePromptLbl";
       this.saveFilePromptLbl.Size = new System.Drawing.Size(179, 44);
       this.saveFilePromptLbl.TabIndex = 7;
@@ -605,7 +622,7 @@
       // 
       // saveFileBrowseBtn
       // 
-      this.saveFileBrowseBtn.Location = new System.Drawing.Point(716, 315);
+      this.saveFileBrowseBtn.Location = new System.Drawing.Point(716, 276);
       this.saveFileBrowseBtn.Name = "saveFileBrowseBtn";
       this.saveFileBrowseBtn.Size = new System.Drawing.Size(80, 30);
       this.saveFileBrowseBtn.TabIndex = 6;
@@ -616,7 +633,7 @@
       // saveFileTbx
       // 
       this.saveFileTbx.Enabled = false;
-      this.saveFileTbx.Location = new System.Drawing.Point(570, 315);
+      this.saveFileTbx.Location = new System.Drawing.Point(570, 276);
       this.saveFileTbx.Name = "saveFileTbx";
       this.saveFileTbx.Size = new System.Drawing.Size(142, 25);
       this.saveFileTbx.TabIndex = 5;
@@ -624,7 +641,7 @@
       // saveFileNameErrorLbl
       // 
       this.saveFileNameErrorLbl.ForeColor = System.Drawing.Color.Red;
-      this.saveFileNameErrorLbl.Location = new System.Drawing.Point(570, 347);
+      this.saveFileNameErrorLbl.Location = new System.Drawing.Point(570, 308);
       this.saveFileNameErrorLbl.Name = "saveFileNameErrorLbl";
       this.saveFileNameErrorLbl.Size = new System.Drawing.Size(220, 46);
       this.saveFileNameErrorLbl.TabIndex = 10;
@@ -635,7 +652,7 @@
       // 
       this.turnNumLbl.AutoSize = true;
       this.turnNumLbl.Font = new System.Drawing.Font("Impact", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.turnNumLbl.Location = new System.Drawing.Point(680, 59);
+      this.turnNumLbl.Location = new System.Drawing.Point(680, 20);
       this.turnNumLbl.Name = "turnNumLbl";
       this.turnNumLbl.Size = new System.Drawing.Size(50, 27);
       this.turnNumLbl.TabIndex = 2;
@@ -645,7 +662,7 @@
       // 
       this.turnLbl.AutoSize = true;
       this.turnLbl.Font = new System.Drawing.Font("Impact", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.turnLbl.Location = new System.Drawing.Point(614, 59);
+      this.turnLbl.Location = new System.Drawing.Point(614, 20);
       this.turnLbl.Name = "turnLbl";
       this.turnLbl.Size = new System.Drawing.Size(62, 27);
       this.turnLbl.TabIndex = 1;
@@ -660,9 +677,27 @@
       this.gridRTxb.TabIndex = 0;
       this.gridRTxb.Text = "";
       // 
+      // currTimeLbl
+      // 
+      this.currTimeLbl.Location = new System.Drawing.Point(590, 410);
+      this.currTimeLbl.Name = "currTimeLbl";
+      this.currTimeLbl.Size = new System.Drawing.Size(200, 23);
+      this.currTimeLbl.TabIndex = 0;
+      this.currTimeLbl.BringToFront();
+      // 
+      // turnTimer
+      // 
+      this.turnTimer.Interval = 1000;
+      this.turnTimer.Tick += new System.EventHandler(this.turnTimer_Tick);
+      // 
       // openFileDialog1
       // 
       this.openFileDialog1.FileName = "openFileDialog1";
+      // 
+      // currTimer
+      // 
+      this.currTimer.Interval = 1000;
+      this.currTimer.Tick += new System.EventHandler(this.currTimer_Tick);
       // 
       // GameForm
       // 
@@ -750,6 +785,10 @@
     private System.Windows.Forms.NumericUpDown dropPosNUD;
     private System.Windows.Forms.Label dropPosPromptLbl;
     private System.Windows.Forms.Label dropPosFullErrorLbl;
+    private System.Windows.Forms.Timer turnTimer;
+    private System.Windows.Forms.Label turnTimerLbl;
+    private System.Windows.Forms.Timer currTimer;
+    private System.Windows.Forms.Label currTimeLbl;
   }
 }
 

@@ -1,11 +1,15 @@
 ﻿/*
- * Oct 16, 2020
+ * Oct 19, 2020
  * Mizuki Hashimoto
  * 
  * This is a class of grid. Its role is to apply changes to the grid with the values passed by controller,
  * and check the grid status. It now holds the state of turn and result so it can be serialized.
  * Added Clear() function to clear the grid squares and reset state of turn and result for Play Again feature.
  * This class work as a model class.
+ * 
+ * [Updates] (Oct 19, 2020)
+ * Added timeRemaining variable and its property.
+ * For storing the countdown time left when serialized the object (when saved the game). 
  */
 
 using System;
@@ -18,6 +22,7 @@ namespace ConnectFourOthelloGUI {
 		private readonly static RedDisc red = new RedDisc();
 		private readonly static YellowDisc yellow = new YellowDisc();
 		private int turn;
+		private int timeRemaining;  // remember the countdown time left when serialized the object
 		private string result;
 
 		// constructor
@@ -59,6 +64,12 @@ namespace ConnectFourOthelloGUI {
 			get => turn;
 			set => turn = value;
 		}
+
+		// property to get or set time remaining
+		public int TimeRemaining {
+			get => timeRemaining;
+			set => timeRemaining = value;
+    }
 
 		// property to get result
 		public string Result {

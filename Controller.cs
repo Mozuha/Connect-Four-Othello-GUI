@@ -1,11 +1,20 @@
 ﻿/*
- * Oct 16, 2020
+ * Oct 19, 2020
  * Mizuki Hashimoto
  * 
  * This is the controller class of Connect Four Othello GUI. 
  * Its role is to receive call from the main class and control Form widgets appropriately.
  * Get user entered value and pass it to the grid class; get the grid state; handle exceptions and
  * validate user input; get the drawing of the grid and print it to Form widget.
+ * 
+ * [Updates] (Oct 19, 2020)
+ * Added two timer widgets. 
+ * One for update current date and time. 
+ * -> Current date and time are visible throughout the GUI i.e. they are always visible in bottom-right corner.
+ * Another for update time remaining for a turn.
+ * -> Added function to limit the time for a single turn. It is set to 3 mins. If the time is over (=0), turn will
+ *    proceed without any action. If the user saved the game state, the time remaining for that turn will be saved
+ *    as well and, upon restoring, the game will start from the turn and the time left when the user saved.
  */
 
 /* Panel hierarchy
@@ -38,11 +47,14 @@ namespace ConnectFourOthelloGUI {
 		private enum Events { newGameBtnEvent, restoreBtnEvent, enterRCDirectlyBtnEvent, enterRCFileBtnEvent, enterRCDefaultBtnEvent,
 			back2MainFromGSSBtnEvent, startGameFromDBtnEvent, back2GSSFromDBtnEvent, gridSizeFileBrowseBtnEvent, startGameFromFBtnEvent,
 			back2GSSFromFBtnEvent, restoreFileBrowseBtnEvent, startGameFromRBtnEvent, back2MainFromRBtnEvent, dropPosBtnEvent,
-			saveFileBrowseBtnEvent, saveExitBtnEvent, yesBtnEvent, noBtnEvent, NULL };
+			saveFileBrowseBtnEvent, saveExitBtnEvent, yesBtnEvent, noBtnEvent, turnTimer_Tick, NULL };
 
 		// Model interface elements
 		Grid grid = null;
 		Drawing drawing = new Drawing();
+
+		// class variables
+		int countdown = 180;  // 3 mins turn countdown
 
 		// GUI elements we want to control
 		private Panel mainMenuPnl = null;
@@ -66,15 +78,20 @@ namespace ConnectFourOthelloGUI {
 		private RichTextBox gridRTxb = null;
 		private Label turnLbl = null;
 		private Label turnNumLbl = null;
+		private System.Windows.Forms.Timer turnTimer = null;
+		private Label turnTimerLbl = null;
 		private Label resultStatusLbl = null;
 		private TextBox saveFileTbx = null;
 		private Label saveFileNameErrorLbl = null;
+		private System.Windows.Forms.Timer currTimer = null;
+		private Label currTimeLbl = null;
 
 		// Default constructor to grab GUI widgets to control
-		public Controller(Panel mm, Panel gss, Panel ercd, Panel ercf, Panel rst, 
+		public Controller(Panel mm, Panel gss, Panel ercd, Panel ercf, Panel rst,
 			Panel gm, Panel dps, Panel rslt, NumericUpDown rn, NumericUpDown cn,
 			NumericUpDown dp, TextBox gsf, TextBox rstf, TextBox sf, RichTextBox gdt, Label gsfne,
-			Label rfne, Label dpp, Label dpfe, Label t, Label tn, Label rs, Label sfne, OpenFileDialog ofd) {
+			Label rfne, Label dpp, Label dpfe, Label t, Label tn, Label tt, Label rs, Label sfne,
+			Label ct, System.Windows.Forms.Timer ttmr, System.Windows.Forms.Timer ctmr, OpenFileDialog ofd) {
 			mainMenuPnl = mm;
 			gridSizeSelectPnl = gss;
 			enterRCDirectlyPnl = ercd;
@@ -96,13 +113,18 @@ namespace ConnectFourOthelloGUI {
 			dropPosFullErrorLbl = dpfe;
 			turnLbl = t;
 			turnNumLbl = tn;
+			turnTimerLbl = tt;
 			resultStatusLbl = rs;
 			saveFileNameErrorLbl = sfne;
+			currTimeLbl = ct;
+			turnTimer = ttmr;
+			currTimer = ctmr;
 			openFileDialog1 = ofd;
 
-			// enter initial state
+			// start current time timer and enter initial state
+			currTimer.Start();
 			GoMainMenuState(States.NULL, Events.NULL);
-    }
+		}
 
 
 		/*********************************************************************
@@ -111,7 +133,7 @@ namespace ConnectFourOthelloGUI {
 		private void GoMainMenuState(States prevState, Events evt) {
 			TopLevelState = States.MainMenu;
 
-			if (prevState == States.NULL || prevState == States.StartGame 
+			if (prevState == States.NULL || prevState == States.StartGame
 				|| prevState == States.Play || prevState == States.Result) {
 
 				mainMenuPnl.Visible = true;
@@ -129,6 +151,8 @@ namespace ConnectFourOthelloGUI {
 
 					// save game state into file if xml file is chosen
 					if (fileName.Contains(".xml")) {
+						turnTimer.Stop();  // exited game; stop timer
+						grid.TimeRemaining = countdown;  // remember countdown time left 
 						Serialize(grid, fileName);
 						resultPnl.Visible = false;
 						dropPosSelectPnl.Visible = true;
@@ -175,7 +199,7 @@ namespace ConnectFourOthelloGUI {
 				restorePnl.Visible = false;
 				gamePnl.Visible = false;
 				gridSizeSelectPnl.Visible = true;
-      }
+			}
 
 			// come back to gridSizeSelectStatePnl from enterRCDirectlyPnl or enterRCFilePnl
 			else if (prevState == States.EnterRCD || prevState == States.EnterRCF) {
@@ -211,7 +235,7 @@ namespace ConnectFourOthelloGUI {
 
 			turnLbl.Text = "Turn: ";
 
-			if (prevState == States.EnterRCD || prevState == States.EnterRCF || prevState == States.GridSizeSelect 
+			if (prevState == States.EnterRCD || prevState == States.EnterRCF || prevState == States.GridSizeSelect
 				|| prevState == States.Restore || prevState == States.MainMenu) {
 
 				bool fileNameError = false;
@@ -233,7 +257,7 @@ namespace ConnectFourOthelloGUI {
 
 					if (fileName.Contains(".csv")) {
 						var tuple = LoadCSV(fileName);
-						row = tuple.Item1; 
+						row = tuple.Item1;
 						col = tuple.Item2;
 
 						// value is less than expected minimum
@@ -264,11 +288,11 @@ namespace ConnectFourOthelloGUI {
 					}
 
 					// empty or invalid filename; show error instead of show gamePnl
-					else {  
+					else {
 						fileNameError = true;
 						gridSizeFileNameErrorLbl.Visible = true;
 						GoEnterRCFState();
-          }
+					}
 				}
 
 				// start new game with default size grid
@@ -292,7 +316,10 @@ namespace ConnectFourOthelloGUI {
 							GoRestoreState();
 						}
 
-						else grid.GetGridSize(out row, out col);
+						else {
+							grid.GetGridSize(out row, out col);
+							countdown = grid.TimeRemaining;  // what was the countdown time left when the game state was stored?
+						}
 					}
 
 					// empty or invalid filename; show error instead of show gamePnl
@@ -300,7 +327,7 @@ namespace ConnectFourOthelloGUI {
 						fileNameError = true;
 						restoreFileNameErrorLbl.Visible = true;
 						GoRestoreState();
-          }
+					}
 				}
 
 				// if no error occured, set gamePnl components appropriately and show gamePnl
@@ -313,24 +340,38 @@ namespace ConnectFourOthelloGUI {
 					dropPosPromptLbl.Text = $"Where to drop? (0-{ col - 1 })";  // set drop pos prompt max
 					dropPosNUD.Maximum = col - 1;  // set drop pos input max
 					UpdateGameDisplay(grid, Events.startGameFromDBtnEvent);  // actually, any of D, F, and R is fine
+					turnTimer.Start();  // start countdown
+					turnTimer_Tick();  // update countdown label
 
 					if (grid.Result != "unfinished") GoResultState();  // restored game is finished; show result
 				}
 			}
 		}
 
-		private void GoPlayState(States prevState) {
+		private void GoPlayState(States prevState, Events evt) {
 			TopLevelState = States.Play;
 
 			saveFileNameErrorLbl.Visible = false;
 
 			if (prevState == States.StartGame || prevState == States.Play) {
+				// if countdown timer reached zero, do nothing and move to next turn
+				if (evt == Events.turnTimer_Tick) {
+					UpdateGameDisplay(grid, Events.turnTimer_Tick);
+					grid.CurrentTurn++;
+					countdown = 180;  // reset countdown timer
+					turnTimer_Tick();  // update countdown timer
+					return;
+				}
+
 				dropPosFullErrorLbl.Visible = false;
 
 				int position = (int)dropPosNUD.Value;  // column where disc will be dropped
 				int top = grid.CheckStack(position);  // row where disc will be dropped
 
 				if (top != -1) {  // the column has space for additional disc to be dropped
+					countdown = 180;  // reset countdown timer
+					turnTimer_Tick();  // update countdown timer
+
 					// red turn
 					if (grid.CurrentTurn % 2 == 1) {
 						RedDisc red = new RedDisc();
@@ -360,6 +401,9 @@ namespace ConnectFourOthelloGUI {
 			else if (prevState == States.Result) {
 				grid.Clear();  // clear discs in grid while grid size remains the same
 				UpdateGameDisplay(grid, Events.yesBtnEvent);
+				countdown = 180;  // reset countdown timer
+				turnTimer.Start();  // start countdown timer
+				turnTimer_Tick();  // update countdown label
 
 				turnLbl.Text = "Turn: ";
 				resultPnl.Visible = false;
@@ -369,6 +413,8 @@ namespace ConnectFourOthelloGUI {
 
 		private void GoResultState() {
 			TopLevelState = States.Result;
+
+			turnTimer.Stop(); // game end; stop countdown timer
 
 			gridSizeSelectPnl.Visible = false;
 			restorePnl.Visible = false;
@@ -443,7 +489,7 @@ namespace ConnectFourOthelloGUI {
 
 				// go back to state came from
 				if (prevState == States.StartGame) GoStartGameState(States.FileBrowse);
-				else if (prevState == States.Play) GoPlayState(States.FileBrowse);
+				else if (prevState == States.Play) GoPlayState(States.FileBrowse, Events.NULL);
 				else if (prevState == States.Result) GoResultState();
 			}
     }
@@ -516,7 +562,7 @@ namespace ConnectFourOthelloGUI {
 
 		/// gamePnl ///
 		public void dropPosBtnEvent() {
-			if (TopLevelState == States.StartGame || TopLevelState == States.Play) GoPlayState(TopLevelState);
+			if (TopLevelState == States.StartGame || TopLevelState == States.Play) GoPlayState(TopLevelState, Events.dropPosBtnEvent);
     }
 
 		public void saveFileBrowseBtnEvent() {
@@ -530,12 +576,29 @@ namespace ConnectFourOthelloGUI {
     }
 
 		public void yesBtnEvent() {
-			if (TopLevelState == States.Result) GoPlayState(TopLevelState);
+			if (TopLevelState == States.Result) GoPlayState(TopLevelState, Events.yesBtnEvent);
     }
 
 		public void noBtnEvent() {
 			if (TopLevelState == States.Result) GoMainMenuState(TopLevelState, Events.noBtnEvent);
     }
+
+		// current time update timer
+		public void currTimer_Tick() {
+			currTimeLbl.Text = DateTime.Now.ToString();  // print current date and time
+    }
+
+		// tick countdown timer
+		public void turnTimer_Tick() {
+			turnTimerLbl.Text = $"{(countdown / 60)}:{(countdown % 60).ToString("00")}";  // format m:ss
+			countdown--;
+
+			// proceed game turn if countdown timer reached zero; condition set to -2 due to small gap
+			if ((TopLevelState == States.StartGame || TopLevelState == States.Play 
+				|| TopLevelState == States.FileBrowse) && countdown == -2) {
+				GoPlayState(States.Play, Events.turnTimer_Tick);
+			}
+		}
 
 
 		/*********************************************************************
@@ -566,7 +629,6 @@ namespace ConnectFourOthelloGUI {
 				else turnNumLbl.Text = $"{ grid.CurrentTurn + 1 } (O)";
       }
     }
-		
 		
 		// try to int-lize and handle error
 		private int ParseInput(string input) {
